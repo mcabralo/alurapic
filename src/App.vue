@@ -25,6 +25,7 @@ export default {
 </script>
 
 <style>
+
 .corpo {
   font-family: Helvetica, sans-serif;
   width: 96%;

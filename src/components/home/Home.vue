@@ -11,15 +11,26 @@
     />
     {{ filtro }}
     <ul class="lista-fotos">
-      <li class="lista-fotos-item" :key="foto" v-for="foto of fotosComFiltro">
+      <li class="lista-fotos-item" :key="foto.id" v-for="foto of fotosComFiltro">
         <meu-painel :titulo="foto.titulo">
-          <imagem-responsiva
-            :url="foto.url"
-            :titulo="foto.titulo"
-          ></imagem-responsiva>
+          <imagem-responsiva v-meu-transform:rotate.animate="15" :url="foto.url" :titulo="foto.titulo" />
+          <!-- v-meu-transform.animate.reverse="15" adicionando o modificador 'reverse' a diretiva é alterada /> -->
+          <meu-botao
+            tipo="button"
+            rotulo="REMOVER"
+            @botaoAtivado="remove(foto)"
+            :confirmacao="true"
+            estilo="perigo"
+          />
+          <!-- confirmacao="false" passa um valor em string, o que não permite fazer o teste de confirmação
+          para isso é necessário usar um data binding mesmo sem uma propriedade, porque ele faz o teste do que
+          está escrito, e não apenas da string, no caso com o DB seria enviado o valor false e não a string false -->
+          <!-- No @click é adicionado o '.native', isso acontece porque o 'meu-botao' apenas pode fazer o que ele 
+          foi programado, e se não tem um método específico nela, o @click não funciona. Para resolver isso o 
+          '.native' vai acessar o elemento nativo, nesse caso o button que está dentro do 'meu-botao'-->
         </meu-painel>
       </li>
-    </ul> 
+    </ul>
     <!-- 
     <img :src="foto1.url" :alt="foto1.titulo" />
     ao invés de usar uma verborragia prlo v-bind, é possível usar apenas os ':' que atinge o mesmo resultado 
@@ -31,11 +42,14 @@
 <script>
 import Painel from "../shared/painel/Painel";
 import ImagemResponsiva from "../shared/imagem-responsiva/ImagemResponsiva";
+import Botao from "../shared/botao/Botao";
+import transform from '../../directives/Transform';
 
 export default {
   components: {
     "meu-painel": Painel,
-    "imagem-responsiva": ImagemResponsiva
+    "imagem-responsiva": ImagemResponsiva,
+    "meu-botao": Botao
   },
 
   data() {
@@ -44,6 +58,16 @@ export default {
       fotos: [],
       filtro: ""
     };
+  },
+
+  directives: {
+    'meu-transform': transform
+  },
+
+  methods: {
+    remove(foto) {
+      alert("Remover a foto " + foto.titulo);
+    }
   },
 
   computed: {
@@ -71,7 +95,6 @@ export default {
 </script>
 
 <style>
-
 .centralizado {
   text-align: center;
 }

@@ -1,7 +1,7 @@
 <template>
   <nav>
     <ul>
-      <li :key="rota" v-for="rota in rotas">
+      <li :key="rota.id" v-for="rota in rotas">
         <router-link :to="rota.path ? rota.path : '/'">
           {{ rota.titulo }}
         </router-link>

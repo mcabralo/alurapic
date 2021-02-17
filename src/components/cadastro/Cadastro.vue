@@ -8,29 +8,25 @@
     <form @submit.prevent="grava()">
       <div class="controle">
         <label for="titulo">TÍTULO</label>
-        <input
-          id="titulo"
-          autocomplete="off"
-          v-model.lazy="foto.titulo"
-        /> <!-- @input="foto.titulo = $event.target.value" :value="foto.titulo" O Vue tem uma
+        <input id="titulo" autocomplete="off" v-model.lazy="foto.titulo" />
+        <!-- @input="foto.titulo = $event.target.value" :value="foto.titulo" O Vue tem uma
         diretiva que existe por baixo dos planos para fazer o two-way binding da mesma forma
         que o discritivo acima-->
-
       </div>
 
       <div class="controle">
         <label for="url">URL</label>
-        <input
-          id="url"
-          autocomplete="off"
-          v-model.lazy="foto.url"
+        <input id="url" autocomplete="off" v-model.lazy="foto.url" />
+        <imagem-responsiva
+          v-show="foto.url"
+          :url="foto.url"
+          :titulo="foto.titulo"
         />
-        <imagem-responsiva v-show="foto.url" :url="foto.url" :titulo="foto.titulo"/>
-         <!-- O modificador '.lazy' e a diretiva 'v-show' são úteis para melhorar o formulário
+        <!-- O modificador '.lazy' e a diretiva 'v-show' são úteis para melhorar o formulário
         tanto atrasando a atualização do binding quanto permitindo o aparecimento de um 
         componente apenas se um objeto for preenchido (nesse caso o componente <imagem-responsiva/> 
         apenas será atualizado quando o objeto fotos for preenchido) -->
-       </div> 
+      </div>
 
       <div class="controle">
         <label for="descricao">DESCRIÇÃO</label>
@@ -43,7 +39,7 @@
 
       <div class="centralizado">
         <meu-botao rotulo="GRAVAR" tipo="submit" />
-        <router-link to="/"
+        <router-link :to="{ name: 'home'}"
           ><meu-botao rotulo="VOLTAR" tipo="button"
         /></router-link>
       </div>
@@ -52,36 +48,39 @@
 </template>
 
 <script>
-
-import ImagemResponsiva from '../shared/imagem-responsiva/ImagemResponsiva.vue'
-import Botao from '../shared/botao/Botao.vue';
-import Foto from '../../domain/foto/Foto';
+import ImagemResponsiva from "../shared/imagem-responsiva/ImagemResponsiva.vue";
+import Botao from "../shared/botao/Botao.vue";
+import Foto from "../../domain/foto/Foto";
+import FotoService from "../../domain/foto/FotoService";
 
 export default {
-
   components: {
-
-    'imagem-responsiva': ImagemResponsiva,
-    'meu-botao': Botao
+    "imagem-responsiva": ImagemResponsiva,
+    "meu-botao": Botao
   },
 
   data() {
     return {
-
       foto: new Foto()
-    }
+    };
   },
 
   methods: {
-
     grava() {
-
-      this.$http
-        .post('http://localhost:3000/v1/fotos', this.foto)
-        .then(() => this.foto = new Foto(), err => console.log(err));
+      this.service.cadastra(this.foto).then(
+        () => (this.foto = new Foto()),
+        err => console.log(err)
+      );
+      // this.$http
+      //   .post('v1/fotos', this.foto)
+      //   .then(() => this.foto = new Foto(), err => console.log(err));
     }
+  },
+
+  created() {
+    this.service = new FotoService(this.$resource);
   }
-}
+};
 </script>
 <style scoped>
 .centralizado {

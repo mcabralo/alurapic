@@ -11,9 +11,17 @@
     />
     {{ filtro }}
     <ul class="lista-fotos">
-      <li class="lista-fotos-item" :key="foto.id" v-for="foto of fotosComFiltro">
+      <li
+        class="lista-fotos-item"
+        :key="foto.id"
+        v-for="foto of fotosComFiltro"
+      >
         <meu-painel :titulo="foto.titulo">
-          <imagem-responsiva v-meu-transform:rotate.animate="15" :url="foto.url" :titulo="foto.titulo" />
+          <imagem-responsiva
+            v-meu-transform:rotate.animate="15"
+            :url="foto.url"
+            :titulo="foto.titulo"
+          />
           <!-- v-meu-transform.animate.reverse="15" adicionando o modificador 'reverse' a diretiva é alterada /> -->
           <meu-botao
             tipo="button"
@@ -43,7 +51,7 @@
 import Painel from "../shared/painel/Painel";
 import ImagemResponsiva from "../shared/imagem-responsiva/ImagemResponsiva";
 import Botao from "../shared/botao/Botao";
-import transform from '../../directives/Transform';
+import transform from "../../directives/Transform";
 
 export default {
   components: {
@@ -61,7 +69,7 @@ export default {
   },
 
   directives: {
-    'meu-transform': transform
+    "meu-transform": transform
   },
 
   methods: {

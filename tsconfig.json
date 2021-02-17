@@ -1,13 +1,3 @@
 {
-    "paths": {
-    "@/*": ["./src/*"]
-    },
-    
-    "include": [
-    "./src/"
-  ],
-
-  "exclude": [
-
-  ],
+  "include": ["./src/"]
 }

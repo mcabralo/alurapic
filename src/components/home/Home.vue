@@ -3,6 +3,7 @@
     <h1 class="centralizado">{{ titulo }}</h1>
     <!-- outra forma de fazer isto é por usar um v-text (<h1 v-text="titulo></h1>) -->
     <!-- 'v-on:' pode ser substituido por @ -->
+    <p v-show="mensagem" class="centralizado">{{ mensagem }}</p>
     <input
       type="search"
       @input="filtro = $event.target.value"
@@ -64,7 +65,8 @@ export default {
     return {
       titulo: "Alurapic",
       fotos: [],
-      filtro: ""
+      filtro: "",
+      mensagem: ""
     };
   },
 
@@ -74,7 +76,18 @@ export default {
 
   methods: {
     remove(foto) {
-      alert("Remover a foto " + foto.titulo);
+      // foto._id
+      this.$http
+      .delete(`http://localhost:3000/v1/fotos/${foto._id}`)
+      .then(() => {
+          let indice = this.fotos.indexOf(foto);
+          this.fotos.splice(indice, 1); 
+          this.mensagem = "Foto removida com sucesso";
+        }, err => {
+          console.log(err);
+          this.mensagem = "Não foi possível remover a foto";
+        }
+      );
     }
   },
 

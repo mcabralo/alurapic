@@ -24,6 +24,9 @@
             :titulo="foto.titulo"
           />
           <!-- v-meu-transform.animate.reverse="15" adicionando o modificador 'reverse' a diretiva é alterada /> -->
+          <router-link :to="{ name: 'altera', params: { id: foto._id } }">
+            <meu-botao tipo="button" rotulo="ALTERAR" />
+          </router-link>
           <meu-botao
             tipo="button"
             rotulo="REMOVER"
@@ -84,10 +87,8 @@ export default {
           this.mensagem = "Foto removida com sucesso";
         },
         err => {
-          console.log(err);
-          this.mensagem = "Não foi possível remover a foto";
-        }
-      );
+          this.mensagem = err.message;
+        });
       // this.resource.delete({ id: foto._id }).then(
       //   () => {
       //     let indice = this.fotos.indexOf(foto);
@@ -130,9 +131,9 @@ export default {
   created() {
     this.service = new FotoService(this.$resource);
 
-    this.service
-      .lista()
-      .then(fotos => (this.fotos = fotos), err => console.log(err)
+    this.service.lista().then(
+      fotos => (this.fotos = fotos),
+      err => (this.mensagem = err.message)
     );
 
     // Médoto diferente do http que funciona com api rest

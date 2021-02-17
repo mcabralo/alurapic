@@ -5,6 +5,7 @@ import VueRouter from "vue-Router";
 import { routes } from "./routes";
 // import './directives/Transform';
 import transform from "./directives/Transform";
+import VeeValidate from 'vee-validate';
 
 Vue.use(VueResource);
 Vue.http.options.root =
@@ -19,6 +20,8 @@ const router = new VueRouter({
   mode: "history"
 });
 /*'routes: routes' Em JS6, quando a propriedade e o valor tem o mesmo nome, não precisa repetir */
+
+Vue.use(VeeValidate);
 
 new Vue({
   el: "#app",

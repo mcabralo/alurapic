@@ -11,7 +11,18 @@
     <form @submit.prevent="grava()">
       <div class="controle">
         <label for="titulo">TÍTULO</label>
-        <input id="titulo" autocomplete="off" v-model.lazy="foto.titulo" />
+        <input
+          data-vv-as="título"
+          name="titulo"
+          v-validate
+          data-vv-rules="required|min:3|max:30"
+          id="titulo"
+          autocomplete="off"
+          v-model="foto.titulo"
+        />
+        <span class="erro" v-show="errors.has('titulo')">{{
+          errors.first("titulo")
+        }}</span>
         <!-- @input="foto.titulo = $event.target.value" :value="foto.titulo" O Vue tem uma
         diretiva que existe por baixo dos planos para fazer o two-way binding da mesma forma
         que o discritivo acima-->
@@ -19,12 +30,23 @@
 
       <div class="controle">
         <label for="url">URL</label>
-        <input id="url" autocomplete="off" v-model.lazy="foto.url" />
+        <input
+          name="url"
+          v-validate
+          data-vv-rules="required"
+          id="url"
+          autocomplete="off"
+          v-model="foto.url"
+        />
         <imagem-responsiva
           v-show="foto.url"
           :url="foto.url"
           :titulo="foto.titulo"
         />
+        <span class="erro" v-show="errors.has('url')">{{
+          errors.first("url")
+        }}</span>
+
         <!-- O modificador '.lazy' e a diretiva 'v-show' são úteis para melhorar o formulário
         tanto atrasando a atualização do binding quanto permitindo o aparecimento de um 
         componente apenas se um objeto for preenchido (nesse caso o componente <imagem-responsiva/> 
@@ -42,7 +64,7 @@
 
       <div class="centralizado">
         <meu-botao rotulo="GRAVAR" tipo="submit" />
-        <router-link :to="{ name: 'home'}"
+        <router-link :to="{ name: 'home' }"
           ><meu-botao rotulo="VOLTAR" tipo="button"
         /></router-link>
       </div>
@@ -72,13 +94,17 @@ export default {
 
   methods: {
     grava() {
-      this.service
-        .cadastra(this.foto)
-        .then(() => { 
-          if(this.id) this.$router.push({ name: 'home' });
-          this.foto = new Foto()
-          }, err => console.log(err)
-      );
+      this.$validator.validateAll().then(success => {
+        if (success) {
+          this.service.cadastra(this.foto).then(
+            () => {
+              if (this.id) this.$router.push({ name: "home" });
+              this.foto = new Foto();
+            },
+            err => console.log(err)
+          );
+        }
+      });
       // this.$http
       //   .post('v1/fotos', this.foto)
       //   .then(() => this.foto = new Foto(), err => console.log(err));
@@ -88,11 +114,10 @@ export default {
   created() {
     this.service = new FotoService(this.$resource);
 
-    if(this.id){
-
+    if (this.id) {
       this.service
         .busca(this.id) // inicia a requisição | Pedido
-        .then(foto => this.foto = foto); // retorna a requisição | Resposta
+        .then(foto => (this.foto = foto)); // retorna a requisição | Resposta
     }
   }
 };
@@ -119,5 +144,9 @@ export default {
 
 .centralizado {
   text-align: center;
+}
+
+.erro {
+  color: red;
 }
 </style>

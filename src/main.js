@@ -6,6 +6,7 @@ import { routes } from "./routes";
 // import './directives/Transform';
 import transform from "./directives/Transform";
 import VeeValidate from 'vee-validate';
+import msg from './pt_BR';
 
 Vue.use(VueResource);
 Vue.http.options.root =
@@ -21,7 +22,15 @@ const router = new VueRouter({
 });
 /*'routes: routes' Em JS6, quando a propriedade e o valor tem o mesmo nome, não precisa repetir */
 
-Vue.use(VeeValidate);
+Vue.use(VeeValidate, {
+  locale: 'pt_BR',
+  dictionary: {
+    pt_BR: {
+      messages: msg
+    }
+  }
+
+});
 
 new Vue({
   el: "#app",

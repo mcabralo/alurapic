@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <img src="/static/teste.png"> -->
     <h1 class="centralizado">{{ titulo }}</h1>
     <!-- outra forma de fazer isto é por usar um v-text (<h1 v-text="titulo></h1>) -->
     <!-- 'v-on:' pode ser substituido por @ -->
@@ -14,7 +15,7 @@
     <ul class="lista-fotos">
       <li
         class="lista-fotos-item"
-        :key="foto.id"
+        :key="foto._id"
         v-for="foto of fotosComFiltro"
       >
         <meu-painel :titulo="foto.titulo">
